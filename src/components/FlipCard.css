@@ -1,0 +1,56 @@
+.flip-card {
+  width: min(80vw, 300px);
+  aspect-ratio: 3 / 4;
+  perspective: 1200px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease-in-out;
+}
+
+.flip-card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 2px solid var(--fg);
+  border-radius: 16px;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.flip-card-text {
+  font-size: clamp(2rem, 10vw, 2.5rem);
+  font-weight: 700;
+  text-align: center;
+  padding: 0 16px;
+  overflow-wrap: break-word;
+  opacity: 0;
+  /* Hide instantly when this face stops being the resting face */
+  transition: opacity 0s linear 0s;
+}
+
+/* Front text only fades in once the flip back to "Reveal" has fully completed */
+.flip-card-inner:not(.flipped) .flip-card-front .flip-card-text {
+  opacity: 1;
+  transition: opacity 0s linear 0.4s;
+}
+
+/* Back text only fades in once the flip to reveal the secret has fully completed */
+.flip-card-inner.flipped .flip-card-back .flip-card-text {
+  opacity: 1;
+  transition: opacity 0s linear 0.4s;
+}
