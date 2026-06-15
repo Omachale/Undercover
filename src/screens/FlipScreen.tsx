@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import FlipCard from '../components/FlipCard';
+import FlipCardImage from '../components/FlipCardImage';
 import type { RoundData } from '../types';
+import coverImage from '../Assets/Images/Blue Cover.webp';
+import paperImage from '../Assets/Images/Blue Paper.webp';
 
 interface FlipScreenProps {
   roundData: RoundData;
@@ -41,10 +43,11 @@ export default function FlipScreen({ roundData, numPlayers, onAllPlayersDone }: 
       <p className="player-label">
         Player {currentPlayerIndex + 1} of {numPlayers}
       </p>
-      <FlipCard
+      <FlipCardImage
         isFlipped={isFlipped}
-        front="Reveal"
-        back={backContent}
+        frontImage={coverImage}
+        backImage={paperImage}
+        backText={backContent}
         onTransitionEnd={handleTransitionEnd}
       />
     </div>

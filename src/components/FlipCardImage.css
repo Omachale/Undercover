@@ -1,0 +1,59 @@
+.fcimg {
+  width: min(80vw, 400px);
+  aspect-ratio: 400 / 608;
+  perspective: 1200px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.fcimg-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease-in-out;
+}
+
+.fcimg-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.fcimg-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background: #0b0b0d;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.fcimg-back {
+  transform: rotateY(180deg);
+}
+
+.fcimg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.fcimg-back-text {
+  position: absolute;
+  font-size: clamp(1.5rem, 8vw, 2rem);
+  font-weight: 700;
+  text-align: center;
+  color: #20242b;
+  opacity: 0;
+  transition: opacity 0s linear 0s;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.fcimg-inner.flipped .fcimg-back-text {
+  opacity: 1;
+  transition: opacity 0s linear 0.4s;
+}
