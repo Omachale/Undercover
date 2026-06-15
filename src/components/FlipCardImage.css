@@ -43,10 +43,14 @@
 
 .fcimg-back-text {
   position: absolute;
+  top: 33.33%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Gloria Hallelujah', cursive;
   font-size: clamp(1.5rem, 8vw, 2rem);
-  font-weight: 700;
+  font-weight: 400;
   text-align: center;
-  color: #20242b;
+  color: #ff0000;
   opacity: 0;
   transition: opacity 0s linear 0s;
   pointer-events: none;
