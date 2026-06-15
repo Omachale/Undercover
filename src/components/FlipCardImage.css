@@ -45,8 +45,8 @@
   position: absolute;
   top: 25%;
   left: 50%;
+  max-width: 90%;
   font-family: 'Gloria Hallelujah', cursive;
-  font-size: clamp(3rem, 16vw, 4rem);
   font-weight: 400;
   text-align: center;
   color: #ff0000;
@@ -55,7 +55,8 @@
   pointer-events: none;
   z-index: 10;
   transform-origin: center;
-  white-space: nowrap;
+  line-height: 1.2;
+  white-space: normal;
 }
 
 .fcimg-inner.flipped .fcimg-back-text {

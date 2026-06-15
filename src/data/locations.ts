@@ -1,1 +1,1 @@
-export const LOCATIONS = ['Beach', 'Supermarket', 'School', 'Park', 'Hospital'] as const;
+export const LOCATIONS = ['Beach', 'Supermarket', 'School', 'Park', 'Hospital', 'Swimming Pool', 'Playground'] as const;

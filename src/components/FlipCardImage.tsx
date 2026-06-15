@@ -17,6 +17,10 @@ export default function FlipCardImage({
   onTransitionEnd,
 }: FlipCardImageProps) {
   const textRotation = useMemo(() => Math.random() * 30 - 15, []);
+  const isLongWord = backText.length > 10;
+  const fontSize = isLongWord
+    ? 'clamp(2rem, 12vw, 3rem)'
+    : 'clamp(3rem, 16vw, 4rem)';
 
   return (
     <div className="fcimg">
@@ -31,7 +35,10 @@ export default function FlipCardImage({
           <img src={backImage} alt="card back" className="fcimg-img" />
           <span
             className="fcimg-back-text"
-            style={{ transform: `translateX(-50%) rotate(${textRotation}deg)` }}
+            style={{
+              fontSize,
+              transform: `translateX(-50%) rotate(${textRotation}deg)`,
+            }}
           >
             {backText}
           </span>
