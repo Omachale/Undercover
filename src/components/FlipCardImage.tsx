@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import './FlipCardImage.css';
 
 interface FlipCardImageProps {
@@ -15,6 +16,8 @@ export default function FlipCardImage({
   backText,
   onTransitionEnd,
 }: FlipCardImageProps) {
+  const textRotation = useMemo(() => Math.random() * 30 - 15, []);
+
   return (
     <div className="fcimg">
       <div
@@ -26,7 +29,12 @@ export default function FlipCardImage({
         </div>
         <div className="fcimg-face fcimg-back">
           <img src={backImage} alt="card back" className="fcimg-img" />
-          <span className="fcimg-back-text">{backText}</span>
+          <span
+            className="fcimg-back-text"
+            style={{ transform: `translateX(-50%) rotate(${textRotation}deg)` }}
+          >
+            {backText}
+          </span>
         </div>
       </div>
     </div>
