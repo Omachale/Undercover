@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import FlipCardImage from '../components/FlipCardImage';
 import type { RoundData } from '../types';
 import coverImage from '../Assets/Images/Blue Cover.webp';
 import paperImage from '../Assets/Images/Blue Paper.webp';
+import revealSound from '../Assets/Audio/Reveal.mp4';
 
 interface FlipScreenProps {
   roundData: RoundData;
@@ -14,6 +15,10 @@ export default function FlipScreen({ roundData, numPlayers, onAllPlayersDone }: 
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const revealAudioRef = useRef<HTMLAudioElement | null>(null);
+  if (!revealAudioRef.current) {
+    revealAudioRef.current = new Audio(revealSound);
+  }
 
   const isSpy = roundData.spyIndices.includes(currentPlayerIndex);
   const backContent = isSpy ? 'SPY' : roundData.location;
@@ -21,6 +26,11 @@ export default function FlipScreen({ roundData, numPlayers, onAllPlayersDone }: 
   function handleTap() {
     if (isAnimating) return;
     setIsAnimating(true);
+    if (!isFlipped) {
+      const audio = revealAudioRef.current!;
+      audio.currentTime = 0;
+      void audio.play();
+    }
     setIsFlipped((prev) => !prev);
   }
 
@@ -40,9 +50,9 @@ export default function FlipScreen({ roundData, numPlayers, onAllPlayersDone }: 
 
   return (
     <div className="screen flip-screen" onClick={handleTap}>
-      <p className="player-label">
-        Player {currentPlayerIndex + 1} of {numPlayers}
-      </p>
+      <div className="btn-primary" aria-hidden="true" style={{ visibility: 'hidden' }}>
+        Start
+      </div>
       <FlipCardImage
         isFlipped={isFlipped}
         frontImage={coverImage}
@@ -50,6 +60,9 @@ export default function FlipScreen({ roundData, numPlayers, onAllPlayersDone }: 
         backText={backContent}
         onTransitionEnd={handleTransitionEnd}
       />
+      <div className="btn-primary" aria-hidden="true" style={{ visibility: 'hidden' }}>
+        Start
+      </div>
     </div>
   );
 }
