@@ -1,10 +1,11 @@
-import { LOCATIONS } from '../data/locations';
-import type { GameConfig, RoundData } from '../types';
+import { getLocationPool } from '../data/locations';
+import type { GameConfig, Location, RoundData } from '../types';
 
-export function pickLocation(recentLocations: string[]): string {
-  const available = LOCATIONS.filter((location) => !recentLocations.includes(location));
-  const pool = available.length > 0 ? available : LOCATIONS;
-  return pool[Math.floor(Math.random() * pool.length)];
+export function pickLocation(recentLocations: string[], eslMode: GameConfig['eslMode']): Location {
+  const pool = getLocationPool(eslMode);
+  const available = pool.filter((location) => !recentLocations.includes(location.en));
+  const candidates = available.length > 0 ? available : pool;
+  return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
 export function assignSpies(numPlayers: number, numSpies: number): number[] {
@@ -18,7 +19,7 @@ export function assignSpies(numPlayers: number, numSpies: number): number[] {
 
 export function createRound(config: GameConfig, recentLocations: string[]): RoundData {
   return {
-    location: pickLocation(recentLocations),
+    location: pickLocation(recentLocations, config.eslMode),
     spyIndices: assignSpies(config.numPlayers, config.numSpies),
   };
 }

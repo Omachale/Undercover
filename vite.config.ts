@@ -8,6 +8,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        // Default globs omit fonts/media; include them so the bundled font,
+        // cover/paper images and reveal audio are cached for offline use.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,webp,mp4}'],
+      },
       manifest: {
         name: 'Spy',
         short_name: 'Spy',

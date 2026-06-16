@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import FlipCardImage from '../components/FlipCardImage';
-import type { RoundData } from '../types';
+import { LANGUAGES } from '../data/locations';
+import type { EslMode, RoundData } from '../types';
 import coverImage from '../Assets/Images/Blue Cover.webp';
 import paperImage from '../Assets/Images/Blue Paper.webp';
 import revealSound from '../Assets/Audio/Reveal.mp4';
@@ -8,10 +9,11 @@ import revealSound from '../Assets/Audio/Reveal.mp4';
 interface FlipScreenProps {
   roundData: RoundData;
   numPlayers: number;
+  eslMode: EslMode;
   onAllPlayersDone: () => void;
 }
 
-export default function FlipScreen({ roundData, numPlayers, onAllPlayersDone }: FlipScreenProps) {
+export default function FlipScreen({ roundData, numPlayers, eslMode, onAllPlayersDone }: FlipScreenProps) {
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -21,7 +23,8 @@ export default function FlipScreen({ roundData, numPlayers, onAllPlayersDone }: 
   }
 
   const isSpy = roundData.spyIndices.includes(currentPlayerIndex);
-  const backContent = isSpy ? 'SPY' : roundData.location;
+  const backContent = isSpy ? 'SPY' : roundData.location.en;
+  const showMagnifier = eslMode !== 'No' && !isSpy;
 
   function handleTap() {
     if (isAnimating) return;
@@ -58,6 +61,8 @@ export default function FlipScreen({ roundData, numPlayers, onAllPlayersDone }: 
         frontImage={coverImage}
         backImage={paperImage}
         backText={backContent}
+        translations={showMagnifier ? roundData.location.translations : null}
+        languages={LANGUAGES}
         onTransitionEnd={handleTransitionEnd}
       />
       <div className="btn-primary" aria-hidden="true" style={{ visibility: 'hidden' }}>

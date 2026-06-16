@@ -63,3 +63,88 @@
   opacity: 1;
   transition: opacity 0s linear 0.4s;
 }
+
+/* --- Magnifier / translation --- */
+
+.fcimg-translation-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  pointer-events: none;
+}
+
+.fcimg-translation-text {
+  color: #1c3a8f;
+}
+
+.fcimg-lens {
+  position: absolute;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  cursor: grab;
+  touch-action: none;
+  z-index: 9;
+  opacity: 0;
+  transition: opacity 0s linear 0s;
+  /* below .fcimg-translation-layer (z-index 11) so the clip circle appears
+     to cut through the glass aperture rather than being hidden by it */
+}
+
+.fcimg-inner.flipped .fcimg-lens {
+  opacity: 1;
+  transition: opacity 0s linear 0.4s;
+}
+
+.fcimg-lens.dragging {
+  cursor: grabbing;
+}
+
+.fcimg-translate-label {
+  position: absolute;
+  transform: translateX(-50%);
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 1.35rem;
+  color: #1c3a8f;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 13;
+  opacity: 0;
+  transition: opacity 0s linear 0s;
+}
+
+.fcimg-inner.flipped .fcimg-translate-label {
+  opacity: 1;
+  transition: opacity 0s linear 0.4s;
+}
+
+.fcimg-lang-picker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(245, 245, 240, 0.97);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+  max-width: 80%;
+}
+
+.fcimg-lang-option {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  border: 1px solid rgba(40, 40, 60, 0.25);
+  border-radius: 8px;
+  background: #fff;
+  color: #1c3a8f;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fcimg-lang-option:active {
+  background: #e8e8f0;
+}

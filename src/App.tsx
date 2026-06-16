@@ -8,7 +8,7 @@ import type { GameConfig, RoundData } from './types';
 
 type Screen = 'setup' | 'flip' | 'end';
 
-const DEFAULT_CONFIG: GameConfig = { numPlayers: 3, numSpies: 1 };
+const DEFAULT_CONFIG: GameConfig = { numPlayers: 6, numSpies: 1, eslMode: 'No' };
 
 const RECENT_LOCATIONS_LIMIT = 2;
 
@@ -22,7 +22,7 @@ function App() {
     const round = createRound(newConfig, recentLocations);
     setConfig(newConfig);
     setRoundData(round);
-    setRecentLocations((prev) => [...prev, round.location].slice(-RECENT_LOCATIONS_LIMIT));
+    setRecentLocations((prev) => [...prev, round.location.en].slice(-RECENT_LOCATIONS_LIMIT));
     setScreen('flip');
   }
 
@@ -41,6 +41,7 @@ function App() {
         <FlipScreen
           roundData={roundData}
           numPlayers={config.numPlayers}
+          eslMode={config.eslMode}
           onAllPlayersDone={handleAllPlayersDone}
         />
       )}
