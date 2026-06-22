@@ -74,7 +74,7 @@ function App() {
       )}
       {screen === 'findthespy' && (
         <FindTheSpyScreen
-          soundVolume={soundVolume}
+          musicVolume={musicVolume}
           onDone={handleFindTheSpyDone}
         />
       )}

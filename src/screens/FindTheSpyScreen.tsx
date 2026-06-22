@@ -3,7 +3,7 @@ import './FindTheSpyScreen.css';
 import startGameSound from '../Assets/Audio/Start Game.mp4';
 
 interface Props {
-  soundVolume: number;
+  musicVolume: number;
   onDone: () => void;
 }
 
@@ -13,7 +13,7 @@ const PAUSE_MS = 1000;
 const SCREEN_DURATION_MS = 7500;
 const FADE_OUT_MS = 500;
 
-export default function FindTheSpyScreen({ soundVolume, onDone }: Props) {
+export default function FindTheSpyScreen({ musicVolume, onDone }: Props) {
   const [revealCount, setRevealCount] = useState(0);
   const [fading, setFading] = useState(false);
   const onDoneRef = useRef(onDone);
@@ -38,7 +38,7 @@ export default function FindTheSpyScreen({ soundVolume, onDone }: Props) {
   // Play Start Game audio
   useEffect(() => {
     const audio = new Audio(startGameSound);
-    audio.volume = soundVolume;
+    audio.volume = musicVolume * 0.7;
     void audio.play().catch(() => {});
     return () => { audio.pause(); audio.src = ''; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
