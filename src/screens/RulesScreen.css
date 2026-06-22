@@ -112,6 +112,7 @@
     );
   background-attachment: local;
   background-position: 0 0.55em;
+  user-select: none;
   /* Gentle fade-in when switching language (keyed remount) */
   animation: rules-fade 0.25s ease;
 }

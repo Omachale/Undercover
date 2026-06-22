@@ -125,14 +125,7 @@ export default function SetupScreen({ initialConfig, onStart, musicVolume, sound
               onClick={decrement}
               aria-label="Decrease players"
             />
-            <input
-              type="number"
-              inputMode="numeric"
-              min={minPlayers}
-              value={numPlayers}
-              onChange={(e) => setNumPlayers(Number(e.target.value))}
-              className="setup-players-input"
-            />
+            <span className="setup-players-input">{numPlayers}</span>
             <button
               type="button"
               className="setup-players-arrow setup-players-arrow-right"

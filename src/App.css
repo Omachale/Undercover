@@ -272,24 +272,13 @@ h1 {
 }
 
 .setup-players-input {
-  border: none;
-  background: transparent;
+  display: inline-block;
   font-family: 'Gloria Hallelujah', cursive;
   font-size: inherit;
   color: #1a1a2e;
   text-align: center;
   width: 2ch;
-  -moz-appearance: textfield;
-}
-
-.setup-players-input::-webkit-outer-spin-button,
-.setup-players-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.setup-players-input:focus {
-  outline: none;
+  user-select: none;
 }
 
 .setup-players-arrow {
