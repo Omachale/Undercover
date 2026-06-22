@@ -20,19 +20,16 @@ const GLASS_IMG_H = 251;
 const GLASS_CENTER_X = 90;
 const GLASS_CENTER_Y = 91;
 const GLASS_APERTURE_RADIUS = 81;
-
-const LENS_RADIUS = 80;
-const GLASS_SCALE = LENS_RADIUS / GLASS_APERTURE_RADIUS;
-const GLASS_DISPLAY_W = GLASS_IMG_W * GLASS_SCALE;
-const GLASS_DISPLAY_H = GLASS_IMG_H * GLASS_SCALE;
 const GLASS_X_FRAC = GLASS_CENTER_X / GLASS_IMG_W;
 const GLASS_Y_FRAC = GLASS_CENTER_Y / GLASS_IMG_H;
 
-// Pixels from aperture centre to the bottom edge of the glass image
-const GLASS_BELOW_APERTURE = GLASS_DISPLAY_H * (1 - GLASS_Y_FRAC);
-
 // Aperture starts centred horizontally, mid-lower on the card
 const DEFAULT_LENS = { x: 50, y: 58 };
+
+// Handle offset: the handle is below and to the left of the lens center,
+// so we offset the focal point so the finger touches the handle instead.
+const HANDLE_X_OFFSET = -35; // percent of card width (negative = left)
+const HANDLE_Y_OFFSET = 22; // percent of card height
 
 function fontSizeFor(text: string): string {
   return text.length >= 10 ? 'clamp(2rem, 12vw, 3rem)' : 'clamp(3rem, 16vw, 4rem)';
@@ -50,6 +47,22 @@ export default function FlipCardImage({
   const textRotation = useMemo(() => Math.random() * 30 - 15, []);
   const backFaceRef = useRef<HTMLDivElement>(null);
   const didDragRef = useRef(false);
+
+  const [cardWidth, setCardWidth] = useState(400);
+  useEffect(() => {
+    const el = backFaceRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      setCardWidth(entries[0].contentRect.width);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const lensRadius = Math.round(cardWidth * 0.20);
+  const glassScale = lensRadius / GLASS_APERTURE_RADIUS;
+  const glassDisplayW = GLASS_IMG_W * glassScale;
+  const glassDisplayH = GLASS_IMG_H * glassScale;
 
   const [selectedLang, setSelectedLang] = useState<Lang | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -84,8 +97,10 @@ export default function FlipCardImage({
   function updateLensFromPointer(e: React.PointerEvent) {
     const rect = backFaceRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-    const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+    const rawX = ((e.clientX - rect.left) / rect.width) * 100;
+    const rawY = ((e.clientY - rect.top) / rect.height) * 100;
+    const x = Math.max(0, Math.min(100, rawX + HANDLE_X_OFFSET));
+    const y = Math.max(0, Math.min(100, rawY - HANDLE_Y_OFFSET));
     setLensPos({ x, y });
   }
 
@@ -111,9 +126,11 @@ export default function FlipCardImage({
 
   function handleLensClick(e: React.MouseEvent) {
     e.stopPropagation();
-    if (!didDragRef.current) {
-      setPickerOpen((prev) => !prev);
-    }
+  }
+
+  function handleTranslateClick(e: React.MouseEvent) {
+    e.stopPropagation();
+    setPickerOpen((prev) => !prev);
   }
 
   return (
@@ -126,7 +143,7 @@ export default function FlipCardImage({
           <img src={frontImage} alt="card front" className="fcimg-img" />
         </div>
         <div className="fcimg-face fcimg-back" ref={backFaceRef}>
-          <img src={backImage} alt="card back" className="fcimg-img" />
+          <img src={backImage} alt="" className="fcimg-img" />
 
           <span
             className="fcimg-back-text"
@@ -141,7 +158,7 @@ export default function FlipCardImage({
           {hasMagnifier && translatedText && (
             <div
               className="fcimg-translation-layer"
-              style={{ clipPath: `circle(${LENS_RADIUS}px at ${lensPos.x}% ${lensPos.y}%)` }}
+              style={{ clipPath: `circle(${lensRadius}px at ${lensPos.x}% ${lensPos.y}%)` }}
             >
               <img src={backImage} alt="" className="fcimg-img" />
               <span
@@ -163,8 +180,8 @@ export default function FlipCardImage({
                 style={{
                   left: `${lensPos.x}%`,
                   top: `${lensPos.y}%`,
-                  width: `${GLASS_DISPLAY_W}px`,
-                  height: `${GLASS_DISPLAY_H}px`,
+                  width: `${glassDisplayW}px`,
+                  height: `${glassDisplayH}px`,
                   transform: `translate(${-GLASS_X_FRAC * 100}%, ${-GLASS_Y_FRAC * 100}%)`,
                   backgroundImage: `url(${glassImage})`,
                 }}
@@ -173,16 +190,13 @@ export default function FlipCardImage({
                 onPointerUp={handleLensPointerUp}
                 onClick={handleLensClick}
               />
-              <span
+              <button
+                type="button"
                 className="fcimg-translate-label"
-                style={{
-                  left: `${lensPos.x}%`,
-                  top: `calc(${lensPos.y}% + ${GLASS_BELOW_APERTURE - 46}px)`,
-                }}
-                onClick={stop}
+                onClick={handleTranslateClick}
               >
                 {currentLangLabel ?? 'Translate'}
-              </span>
+              </button>
             </>
           )}
 

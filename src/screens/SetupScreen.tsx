@@ -1,17 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import type { EslMode, GameConfig } from '../types';
+import VolumePanel from '../components/VolumePanel';
 
 const eslCycle: EslMode[] = ['No', 'A1', 'A2', 'B1', 'B2', 'C1'];
 import coverImage from '../Assets/Images/Blue Cover.webp';
 import playersImage from '../Assets/Images/Players.png';
 import optionsImage from '../Assets/Images/Options.png';
+import startImage from '../Assets/Images/Start.png';
 
 interface SetupScreenProps {
   initialConfig: GameConfig;
   onStart: (config: GameConfig) => void;
+  musicVolume: number;
+  soundVolume: number;
+  onMusicVolumeChange: (v: number) => void;
+  onSoundVolumeChange: (v: number) => void;
+  onOpenRules: () => void;
 }
 
-export default function SetupScreen({ initialConfig, onStart }: SetupScreenProps) {
+export default function SetupScreen({ initialConfig, onStart, musicVolume, soundVolume, onMusicVolumeChange, onSoundVolumeChange, onOpenRules }: SetupScreenProps) {
   const [numPlayers, setNumPlayers] = useState(initialConfig.numPlayers);
   const [numSpies, setNumSpies] = useState(initialConfig.numSpies);
   const [eslMode, setEslMode] = useState<EslMode>('No');
@@ -98,11 +105,17 @@ export default function SetupScreen({ initialConfig, onStart }: SetupScreenProps
 
   return (
     <div className="screen setup-screen">
-      <div className="btn-primary" aria-hidden="true" style={{ visibility: 'hidden' }}>
-        Start
-      </div>
       <div className="setup-cover">
         <img src={coverImage} alt="" className="setup-cover-img" />
+        <button type="button" className="rules-icon" onClick={onOpenRules} aria-label="How to play">
+          <span className="rules-icon-q">?</span>
+        </button>
+        <VolumePanel
+          musicVolume={musicVolume}
+          soundVolume={soundVolume}
+          onMusicChange={onMusicVolumeChange}
+          onSoundChange={onSoundVolumeChange}
+        />
         <div className="setup-players-note">
           <img src={playersImage} alt="" className="setup-players-img" />
           <div className="setup-players-controls" style={{ visibility: fontsReady ? 'visible' : 'hidden' }}>
@@ -146,11 +159,11 @@ export default function SetupScreen({ initialConfig, onStart }: SetupScreenProps
             {eslMode}
           </span>
         </div>
+        <button type="button" className="setup-start" onClick={handleStart} aria-label="Start">
+          <img src={startImage} alt="Start" />
+        </button>
+        {error && <p className="setup-error">{error}</p>}
       </div>
-      {error && <p className="error">{error}</p>}
-      <button className="btn-primary" onClick={handleStart}>
-        Start
-      </button>
     </div>
   );
 }

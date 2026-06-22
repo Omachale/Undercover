@@ -1,0 +1,262 @@
+.game-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  overflow: hidden;
+  --vol-panel-height: 33.33svh;
+}
+
+/* ── Bouncing card wrapper ───────────────────────────────────────── */
+
+.game-card-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 268px;   /* DISPLAY_W(260) + 4px border × 2 */
+  height: 403px;  /* DISPLAY_H(395) + 4px border × 2 */
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.game-card-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    hsl(0,   55%, 18%), hsl(30,  55%, 18%),
+    hsl(60,  55%, 18%), hsl(90,  55%, 18%),
+    hsl(120, 55%, 18%), hsl(150, 55%, 18%),
+    hsl(180, 55%, 18%), hsl(210, 55%, 18%),
+    hsl(240, 55%, 18%), hsl(255, 55%, 18%),
+    hsl(260, 90%, 55%), hsl(290, 90%, 62%),
+    hsl(320, 90%, 62%), hsl(350, 90%, 55%),
+    hsl(10,  90%, 55%), hsl(35,  90%, 55%),
+    hsl(55,  55%, 18%), hsl(90,  55%, 18%),
+    hsl(130, 55%, 18%), hsl(170, 55%, 18%),
+    hsl(210, 55%, 18%), hsl(250, 55%, 18%),
+    hsl(0,   55%, 18%)
+  );
+  animation: rainbow-spin 4s linear infinite;
+  z-index: 0;
+}
+
+.game-card-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: var(--bg);
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.game-card-img {
+  position: absolute;
+  inset: 4px;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  object-fit: contain;
+  border-radius: 12px;
+  transition: opacity 0.6s ease;
+  z-index: 2;
+}
+
+.game-card-overlay {
+  position: absolute;
+  inset: 4px;
+  border-radius: 12px;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+@keyframes rainbow-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Animates only the conic-gradient angle — element itself stays put */
+@property --btn-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes btn-spin {
+  to { --btn-angle: 360deg; }
+}
+
+/* ── Controls bar ────────────────────────────────────────────────── */
+
+.game-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 16px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  background: transparent;
+}
+
+.game-controls-row {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+/* ── Button wrapper — spinning rainbow border ────────────────────── */
+
+.btn-wrap {
+  --border-w: 6px;
+  --spin-duration: 4s;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  /* No padding — wrapper size is fixed; only the ring thickness changes */
+}
+
+.btn-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: var(--border-w);
+  border-radius: inherit;
+  /* Gradient angle rotates; element itself does NOT rotate */
+  animation: btn-spin var(--spin-duration) linear infinite;
+  /* Show only the border ring — carve out interior */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  z-index: 0;
+}
+
+.btn-wrap::after {
+  display: none;
+}
+
+/* End Game — red-skewed focal band */
+.btn-wrap--end::before {
+  background: conic-gradient(
+    from var(--btn-angle),
+    hsl(0,   55%, 18%), hsl(40,  55%, 18%),
+    hsl(80,  55%, 18%), hsl(120, 55%, 18%),
+    hsl(160, 55%, 18%), hsl(200, 55%, 18%),
+    hsl(240, 55%, 18%), hsl(280, 55%, 18%),
+    hsl(310, 55%, 18%), hsl(330, 55%, 18%),
+    hsl(345, 90%, 58%), hsl(358, 90%, 64%),
+    hsl(8,   90%, 64%), hsl(22,  90%, 58%),
+    hsl(45,  55%, 18%), hsl(80,  55%, 18%),
+    hsl(120, 55%, 18%), hsl(160, 55%, 18%),
+    hsl(200, 55%, 18%), hsl(0,   55%, 18%)
+  );
+}
+
+/* Next Track — blue-skewed focal band */
+.btn-wrap--next::before {
+  background: conic-gradient(
+    from var(--btn-angle),
+    hsl(0,   55%, 18%), hsl(40,  55%, 18%),
+    hsl(80,  55%, 18%), hsl(120, 55%, 18%),
+    hsl(155, 55%, 18%), hsl(175, 55%, 18%),
+    hsl(195, 90%, 55%), hsl(212, 90%, 62%),
+    hsl(228, 90%, 62%), hsl(244, 90%, 55%),
+    hsl(265, 55%, 18%), hsl(295, 55%, 18%),
+    hsl(325, 55%, 18%), hsl(355, 55%, 18%),
+    hsl(0,   55%, 18%)
+  );
+}
+
+/* Loop — green-skewed focal band */
+.btn-wrap--loop::before {
+  background: conic-gradient(
+    from var(--btn-angle),
+    hsl(0,   55%, 18%), hsl(35,  55%, 18%),
+    hsl(70,  55%, 18%), hsl(90,  55%, 18%),
+    hsl(105, 88%, 38%), hsl(122, 88%, 44%),
+    hsl(138, 88%, 44%), hsl(154, 88%, 38%),
+    hsl(170, 55%, 18%), hsl(205, 55%, 18%),
+    hsl(245, 55%, 18%), hsl(285, 55%, 18%),
+    hsl(325, 55%, 18%), hsl(360, 55%, 18%),
+    hsl(0,   55%, 18%)
+  );
+}
+
+/* Loop ON — faster spin + thicker border; wrapper size unchanged */
+.btn-wrap--loop.loop-on {
+  --spin-duration: 1.6s;
+  --border-w: 10px;
+}
+
+/* ── Button inner ────────────────────────────────────────────────── */
+
+.game-btn {
+  position: relative;
+  z-index: 2;
+  display: block;
+  padding: 16px 36px;
+  border: none;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--fg);
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 1.7rem;
+  cursor: pointer;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.game-btn:active {
+  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.45);
+  opacity: 0.85;
+}
+
+/* ── Loop button content — icon + note side by side ─────────────── */
+
+.loop-btn-content {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.loop-note-icon {
+  width: 0.8em;
+  height: 0.8em;
+}
+
+.game-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ── End Game expand panel ───────────────────────────────────────── */
+
+.end-panel {
+  transition: top 0.3s ease, left 0.3s ease, width 0.3s ease, height 0.3s ease;
+  z-index: 30;
+}
+
+.end-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+}
+
+.end-panel-options {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  transition: opacity 0.3s ease;
+}
+

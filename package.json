@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fontsource/gloria-hallelujah": "^5.2.8",
+    "@fontsource/roboto": "^5.2.10",
+    "@fontsource/special-elite": "^5.2.8",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

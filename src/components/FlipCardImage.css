@@ -1,5 +1,5 @@
 .fcimg {
-  width: min(80vw, 400px);
+  width: var(--card-width);
   aspect-ratio: 400 / 608;
   perspective: 1200px;
   border-radius: 16px;
@@ -101,15 +101,20 @@
 
 .fcimg-translate-label {
   position: absolute;
+  left: 50%;
+  bottom: 10%;
   transform: translateX(-50%);
   font-family: 'Gloria Hallelujah', cursive;
   font-size: 1.35rem;
   color: #1c3a8f;
   white-space: nowrap;
-  pointer-events: none;
-  z-index: 13;
+  z-index: 8;
   opacity: 0;
   transition: opacity 0s linear 0s;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
 .fcimg-inner.flipped .fcimg-translate-label {
