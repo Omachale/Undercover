@@ -15,8 +15,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,webp,mp4}'],
       },
       manifest: {
-        name: 'Spy',
-        short_name: 'Spy',
+        name: 'Undercover',
+        short_name: 'Undercover',
         description: 'Pass-and-play social deduction game',
         theme_color: '#0b0b0d',
         background_color: '#0b0b0d',
